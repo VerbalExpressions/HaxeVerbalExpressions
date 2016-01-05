@@ -1,0 +1,19 @@
+### test all platforms
+
+#test-cpp.hxml
+#--next
+test-cs.hxml
+#--next
+#test-interp.hxml
+--next
+test-java.hxml
+--next
+test-js.hxml
+--next
+test-neko.hxml
+--next
+test-php.hxml
+--next
+test-python.hxml
+--next
+test-swf.hxml
