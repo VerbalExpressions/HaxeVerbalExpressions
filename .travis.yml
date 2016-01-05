@@ -49,11 +49,12 @@ install:
   - haxelib list
 
 script:
+  - haxe test-interp.hxml
   - haxe test-neko.hxml         && neko bin/HxVerbalExpressions.n
   - haxe test-js.hxml           && node bin/HxVerbalExpressions.js
   - haxe test-java.hxml         && java -jar bin/Test.jar
   - haxe test-php.hxml          && php bin/index.php
   - haxe test-cs.hxml           && mono bin/bin/Test.exe
   - haxe test-swf.hxml
-  - haxe test-cpp.hxml          && ./bin/HxVerbalExpressions
+  - haxe test-cpp.hxml          && ./bin/HelloWorld
   - haxe test-python.hxml       && python3 bin/HxVerbalExpressions.py
