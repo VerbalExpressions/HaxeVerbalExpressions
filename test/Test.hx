@@ -8,12 +8,11 @@ import haxe.unit.TestRunner;
  * @author Mark Knol
  */
 class Test extends TestCase {
-	
-	static function main() {
-		var testRunner = new TestRunner();
+  static function main() {
+    var testRunner = new TestRunner();
     testRunner.add(new Test());
     testRunner.run();
-	}
+  }
   
   public function testUrl() {
     var expression = new VerbalExpression()
