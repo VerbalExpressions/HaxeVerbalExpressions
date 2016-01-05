@@ -59,14 +59,15 @@ _This project has no external dependencies._
 
 | Haxe target | status |
 |-------------|--------|
-| C++ | fails |
+| Haxe interpreter | works |
+| C++ | works |
 | C# | works  |
-| java | works |
-| javascript | works |
-| neko | works |
-| php | works |
-| python | works |
-| flash | works |
+| Java | works |
+| JavaScript | works |
+| Neko | works |
+| PHP | works |
+| Python | works |
+| Flash | works |
 
 > **Note:** Haxe is awesome! One codebase, many targets, no platform specific code.
 
