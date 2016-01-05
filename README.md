@@ -11,6 +11,12 @@
 
 Clone the project or download the sources.
 
+Basic usage of Verbal Expressions is trough `new expressions.VerbalExpression()`:
+
+```haxe
+var myExpression = new expressions.VerbalExpression();
+```
+  
 ### Examples
 
 ##### Testing valid URLs

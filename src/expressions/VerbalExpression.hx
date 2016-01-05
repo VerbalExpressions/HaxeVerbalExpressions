@@ -1,7 +1,7 @@
 package expressions;
 
 /**
- * @author Mark Knol
+  @author Mark Knol
  */
 class VerbalExpression {
   private var _prefixes = "";
@@ -9,38 +9,49 @@ class VerbalExpression {
   private var _suffixes = "";
   private var _modifiers = "gm"; // default to global multiline matching
 
-  public inline function new() {
+  public function new() {
     
   }
   
   /**
-   * Sanitation function for adding anything safely to the expression.
+    Sanitation function for adding anything safely to the expression.
    */
-  public inline function sanitize(value:String):String {
+  public function sanitize(value:String):String {
     return ~/[-\\.,_*+?^$[\](){}!=|]/ig.replace(value,"\\$&");
   }
 
+  /**
+    Test if regular expression matches `toTest` value.
+   */
   public inline function test(toTest:String):Bool {
     return isMatch(toTest);
   }
 
+  /**
+    Test if regular expression matches `toTest` value.
+   */
   public inline function isMatch(toTest:String):Bool {
     return toRegex().match(toTest);
   }
 
+  /**
+    Gets instance of `EReg` with current regular expression.
+   */
   public inline function toRegex():EReg {
     return new EReg(toString(), _modifiers);
   }
 
+  /**
+    Gets the source of the regular expression.
+   */
   public inline function toString():String {
     return _prefixes + _source + _suffixes;
   }
   
   /**
-   * Function to add stuff to the expression. 
-   * Also compiles the new expression so it's ready to be used.
+    Append literal expression to the object. Also refreshes the source expression.
    */
-  public inline function add(value:String, doSanitize:Bool = true):VerbalExpression {
+  public function add(value:String, doSanitize:Bool = true):VerbalExpression {
     #if debug
     if (value == null || value == "") {
       throw "VerbalExpression: value cannot be null or empty";
@@ -54,82 +65,149 @@ class VerbalExpression {
     return this;
   }
 
-  public inline function startOfLine(enable:Bool = true):VerbalExpression {
+  /**
+     Mark the expression to start at the first character of the line.
+   */
+  public function startOfLine(enable:Bool = true):VerbalExpression {
     _prefixes = enable ? "^" : "";
     return this;
   }
 
-  public inline function endOfLine(enable:Bool = true):VerbalExpression {
+  /**
+     Mark the expression to end at the last character of the line.
+   */
+  public function endOfLine(enable:Bool = true):VerbalExpression {
     _suffixes = enable ? "$" : "";
     return this;
   }
 
-  public inline function then(value:String, doSanitize:Bool = true):VerbalExpression {
+  /**
+    Add a string to the expression.
+   */
+  public function then(value:String, doSanitize:Bool = true):VerbalExpression {
     var sanitizedValue = doSanitize ? sanitize(value) : value;
     return add('($sanitizedValue)', false);
   }
 
-  public inline function find(value:String) {
+  /**
+    Add a string to the expression.
+   */
+  public function find(value:String):VerbalExpression {
     return then(value);
   }
 
-  public inline function maybe(value:String, doSanitize:Bool = true):VerbalExpression {
+  /**
+    Add a string to the expression that might appear once (or not).
+   */
+  public function maybe(value:String, doSanitize:Bool = true):VerbalExpression {
     value = doSanitize ? sanitize(value) : value;
     return add('($value)?', false);
   }
 
-  public inline function anything():VerbalExpression {
+  /**
+    Add expression that matches anything (includes empty string).
+   */
+  public function anything():VerbalExpression {
     return add("(.*)", false);
   }
 
-  public inline function anythingBut(value:String, doSanitize:Bool = true):VerbalExpression {
+  /**
+    Add expression that matches anything, but not passed argument.
+   */
+  public function anythingBut(value:String, doSanitize:Bool = true):VerbalExpression {
     value = doSanitize ? sanitize(value) : value;
     return add('([^{$value}]*)', false);
   }
 
-  public inline function something():VerbalExpression {
+  /**
+    Add expression that matches something that might appear once (or more).
+   */
+  public function something():VerbalExpression {
     return add('(.+)', false);
   }
 
-  public inline function somethingBut(value:String, doSanitize:Bool = true):VerbalExpression {
+  /**
+    
+   */
+  public function somethingBut(value:String, doSanitize:Bool = true):VerbalExpression {
     value = doSanitize ? sanitize(value) : value;
     return add('([^{$value}]+)', false);
   }
 
+  /**
+    Shorthand function for the `StringTools.replace` function to give more logical flow if,
+    for example, we're doing multiple replacements on one regular expression.
+   */
   public inline function replace(input:String, value:String):String {
    return toRegex().replace(input, value);
   }
 
-  public inline function lineBreak():VerbalExpression {
+  /**
+    Add universal line break expression.
+   */
+  public function lineBreak():VerbalExpression {
     return add('(\n|(\r\n))', false);
   }
 
-  public inline function br():VerbalExpression {
+  /**
+    Shorthand for `lineBreak()`.
+   */
+  public function br():VerbalExpression {
     return lineBreak();
   }
 
-  public inline function tab():VerbalExpression {
+  /**
+    Add expression to match a tab character.
+   */
+  public function tab():VerbalExpression {
     return add('\\t');
   }
 
-  public inline function word():VerbalExpression {
+  /**
+    Adds an expression to match a word.
+   */
+  public function word():VerbalExpression {
     return add('\\w+', false);
   }
-
-  public inline function anyOf(value:String, doSanitize:Bool = true):VerbalExpression {
+  
+  /**
+    Add expression to match any of given value.
+   */
+  public function anyOf(value:String, doSanitize:Bool = true):VerbalExpression {
     value = doSanitize ? sanitize(value) : value;
     return add('[$value]', false);
   }
 
-  public inline function any(value:String):VerbalExpression {
-    return anyOf(value);
+  /**
+    Shorthand for `anyOf(value, true)`.
+   */
+  public function any(value:String):VerbalExpression {
+    return anyOf(value, true);
   }
   
-  public inline function count(from:Int, ?to:Int):VerbalExpression {
+  /**
+    Repeats the previous item exactly `from` times or between `from` and `to` times. for example:
+     ```
+     .find("w").count(3) // produce (w){3}
+     ```
+   */
+  public function count(from:Int, ?to:Int):VerbalExpression {
     return to == null ? add('{$from}', false) : add('{$from-$to}', false);
   }
 
-  public inline function range(from1:String, to1:String, ?from2:String, ?to2:String, ?from3:String, ?to3:String, ?from4:String, ?to4:String):VerbalExpression {
+  /**
+    Add expression to match a range (or multiply ranges).
+    Usage: 
+    ```
+    .range(from, to [, from, to ... ])
+    ```
+    Example: 
+    The following matches a hexadecimal number:
+    ````
+    regex().range( "0", "9", "a", "f") // produce [0-9a-f]
+    ```
+   */
+  public function range(from1:String, to1:String, ?from2:String, ?to2:String, ?from3:String, ?to3:String, ?from4:String, ?to4:String):VerbalExpression {
     var v = '$from1-$to1';
     if (from2 != null && to2 != null) v += '$from2-$to2';
     if (from3 != null && to2 != null) v += '$from3-$to3';
@@ -138,19 +216,20 @@ class VerbalExpression {
     return this;
   }
 
-  public inline function multiple(value:String, doSanitize:Bool = true):VerbalExpression {
-    value = doSanitize ? this.sanitize(value) : value;
-    return add('($value)+', false);
-  }
-
-  public inline function or(value:String, doSanitize:Bool = true):VerbalExpression {
+  /**
+    Add a alternative expression to be matched.
+   */
+  public function or(value:String, doSanitize:Bool = true):VerbalExpression {
     _prefixes += "(";
     _suffixes = ")" + _suffixes;
     _source += ")|(";
     return add(value, doSanitize);
   }
 
-  public inline function beginCapture(groupName:String = null):VerbalExpression {
+  /**
+    Open brace to current position and closed to suffixes.
+   */
+  public function beginCapture(groupName:String = null):VerbalExpression {
     if (groupName == null) {
       return add("(", false);
     }  else {
@@ -158,27 +237,43 @@ class VerbalExpression {
     }
   }
 
-  public inline function endCapture():VerbalExpression {
+  /**
+    Close brace for previous capture and remove last closed brace from suffixes.
+    Can be used to continue build regex after `beginCapture` or to add multiply captures.
+   */
+  public function endCapture():VerbalExpression {
     return add(")", false);
   }
 
-  public inline function repeatPrevious(from:Int, to:Int = null):VerbalExpression {
+  /**
+    Same as `count()`.
+   */
+  public function repeatPrevious(from:Int, to:Int = null):VerbalExpression {
     return count(from, to);
   }
   
-  public inline function addModifier(modifier:String):VerbalExpression {
+  /**
+    Adds given search modifier.
+   */
+  public function addModifier(modifier:String):VerbalExpression {
     if (_modifiers.indexOf( modifier ) == -1) {
       _modifiers += modifier;
     }
     return this;
   }
 
-  public inline function removeModifier(modifier:String):VerbalExpression {
+  /**
+    Removes given search modifier.
+   */
+  public function removeModifier(modifier:String):VerbalExpression {
     _modifiers = StringTools.replace(_modifiers, modifier, "");
     return this;
   }
 
-  public inline function withAnyCase(enable:Bool = true):VerbalExpression {
+  /**
+    Shorthand to enable "i" as search modifier.
+   */
+  public function withAnyCase(enable:Bool = true):VerbalExpression {
     if (enable) {
       addModifier('i');
     } else {
@@ -187,7 +282,10 @@ class VerbalExpression {
     return this;
   }
 
-  public inline function useOneLineSearchOption(enable:Bool):VerbalExpression {
+  /**
+    Shorthand to enable "m" as search modifier.
+   */
+  public function useOneLineSearchOption(enable:Bool):VerbalExpression {
     if (enable) {
       removeModifier('m');
     } else {
@@ -196,7 +294,10 @@ class VerbalExpression {
     return this;
   }
 
-  public inline function withOptions(options:String):VerbalExpression {
+  /**
+    Sets the search modifiers to given options.
+   */
+  public function withOptions(options:String):VerbalExpression {
     this._modifiers = options;
     return this;
   }
