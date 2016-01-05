@@ -30,21 +30,6 @@ class Test extends TestCase {
     assertFalse(expression.isMatch("haxe.org"));
     //assertEquals("^(http)(s)?(://)(www.)?([^{ }]*)$", expression.toString());
   }
-  
-  public function testPhoneNr() {
-    var expression = new VerbalExpression()
-            .startOfLine()
-            .then("+")
-            .beginCapture().range("0", "9").count(3).maybe("-").maybe(" ").endCapture()
-            .count(3)
-            .endOfLine();
-
-    assertFalse(expression == null);
-    assertTrue(expression.isMatch("+097 234 243"));
-    assertTrue(expression.isMatch("+097234243"));
-    assertTrue(expression.isMatch("+097-234-243"));
-    assertFalse(expression.isMatch("097 234 243"));
-  }
 	
   public function testReplace() {
     var result = new VerbalExpression()
