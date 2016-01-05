@@ -68,7 +68,7 @@ _This project has no external dependencies._
 | Haxe interpreter | works |
 | C++ | works |
 | C# | works  |
-| Java | works |
+| Java | compiles but has errors |
 | JavaScript | works |
 | Neko | works |
 | PHP | works |
