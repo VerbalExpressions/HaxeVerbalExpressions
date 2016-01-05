@@ -40,5 +40,5 @@ script:
   - haxe test-php.hxml          && php bin/index.php
   - haxe test-cs.hxml           && mono bin/bin/Test.exe
   - haxe test-swf.hxml
-#  - haxe test-cpp.hxml          && ./bin/HxVerbalExpressions
+  - haxe test-cpp.hxml          && ./bin/HxVerbalExpressions
   - haxe test-python.hxml       && python3 bin/HxVerbalExpressions.py
