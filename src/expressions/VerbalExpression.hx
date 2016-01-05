@@ -3,8 +3,7 @@ package expressions;
 /**
  * @author Mark Knol
  */
-class VerbalExpression 
-{
+class VerbalExpression {
   private var _prefixes = "";
   private var _source = "";
   private var _suffixes = "";
