@@ -1,4 +1,4 @@
-# hx-verbal-expression
+# Haxe VerbalExpressions
 
 [![Build Status](https://travis-ci.org/markknol/hx-verbal-expressions.svg?branch=master)](https://travis-ci.org/markknol/hx-verbal-expressions)
 
