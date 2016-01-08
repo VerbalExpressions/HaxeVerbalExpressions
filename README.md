@@ -1,6 +1,6 @@
 # Haxe VerbalExpressions
 
-[![Build Status](https://travis-ci.org/markknol/hx-verbal-expressions.svg?branch=master)](https://travis-ci.org/markknol/hx-verbal-expressions)
+[![Build Status](https://travis-ci.org/VerbalExpressions/HaxeVerbalExpressions.svg)](https://travis-ci.org/VerbalExpressions/HaxeVerbalExpressions)
 
 ### Haxe Regular Expressions made easy
 
